@@ -27,12 +27,13 @@ def load(filename):
     with open(filename) as file:
         return set(json.load(file))
 
-def diff(machine_with):
-    machine_file = MACHINES_DIR + machine_with + ".json"
+def diff(machine_name):
+    machine_file = MACHINES_DIR + machine_name + ".json"
     set_a = load(machine_file)
     set_b = pkglist()
     
     pkg_diff = [x for x in set_a if x not in set_b]
+    
     for elem in sorted(pkg_diff):
         print elem
     
@@ -40,5 +41,5 @@ if __name__ == "__main__":
     #machine_name = sys.argv[1]
     #dump(machine_name, pkglist())
     
-    diff("minhaz-desktop")
+    diff("minhaz-laptop")
     
