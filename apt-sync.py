@@ -11,7 +11,6 @@ MACHINES_DIR = "machines" + os.sep
 MACHINE_FILE = ".machine"
 
 def dump(machine_name):
-    print("Dumping to " + machine_name)
     os.system("dpkg --get-selections | awk '{print $1}' > " + machine_name)
 
 def diff(machine_this, machine_that, verbose=False):
@@ -27,16 +26,26 @@ def diff(machine_this, machine_that, verbose=False):
     
     out.pop()
     
+    pkg_this = []
+    pkg_that = []
+    
     for item in out:
         if item.startswith("<"):
-            print("+ " + item[2:])
+            pkg_this.append(item[2:])
         else:
-            print("- " + item[2:])
+            pkg_that.append(item[2:])
+    
+    for item in pkg_this:
+        print("+ " + item)
+    
+    for item in pkg_that:
+        print("- " + item)
+    
         
 if __name__ == "__main__":
     if not os.path.exists(MACHINES_DIR):
         os.mkdir(MACHINES_DIR)
-        
+    
     machine_this = None
     
     try:
@@ -46,7 +55,9 @@ if __name__ == "__main__":
         machine_this = raw_input("No machine name was deteced.\nMachine-Name: ")
         with open(MACHINE_FILE, 'w') as file:
             file.write(machine_this)
-            
+    
+    os.chdir(MACHINES_DIR)
+    
     try:
         arg1 = sys.argv[1]
         
@@ -56,7 +67,6 @@ if __name__ == "__main__":
         if arg1 == "dump":
             dump(machine_this)
         elif arg1 == "diff":
-            os.chdir(MACHINES_DIR)
             try:
                 diff(sys.argv[2])
             except:
