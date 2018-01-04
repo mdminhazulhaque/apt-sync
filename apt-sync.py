@@ -35,13 +35,15 @@ def diff(machine_this, machine_that, verbose=False):
         else:
             pkg_that.append(item[2:])
     
+    kdialog = "kdialog --checklist Installed"
     for item in pkg_this:
-        print("+ " + item)
+        kdialog += " ".join([" ", item, item, "off"])
     
-    for item in pkg_that:
-        print("- " + item)
+    os.system(kdialog)
     
-        
+    #for item in pkg_that:
+        #print("- " + item)
+            
 if __name__ == "__main__":
     if not os.path.exists(MACHINES_DIR):
         os.mkdir(MACHINES_DIR)
